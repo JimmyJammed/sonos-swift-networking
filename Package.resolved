@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
+        "state": {
+          "branch": null,
+          "revision": "eaf6e622dd41b07b251d8f01752eab31bc811493",
+          "version": "5.4.1"
+        }
+      },
+      {
+        "package": "Mocker",
+        "repositoryURL": "https://github.com/WeTransfer/Mocker.git",
+        "state": {
+          "branch": null,
+          "revision": "16daea258180b92bb77f8a33d3a1770aca9f5d9f",
+          "version": "2.5.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

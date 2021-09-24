@@ -1,0 +1,71 @@
+//
+//  File.swift
+//
+//
+//  Created by James Hickman on 2/20/21.
+//
+
+import Foundation
+import Alamofire
+
+/// PlaybackTogglePlayPauseNetwork is used to toggle the playback state on the given group, if possible. Upon completion of the command, the player sends playbackStatus events to all subscribers. When toggling from pause to play, this functions similar to the play command. When transitioning from play to pause, it functions like the pause command. See those commands for more details about the functionality of those states.
+public class PlaybackTogglePlayPauseNetwork: Network {
+    
+    // MARK: - Private Vars
+    
+    private var accessToken: String
+    private var groupId: String
+    private var successHandler: (Data?) -> Void
+    private var failureHandler: (Error?) -> Void
+    
+    // MARK: - Init
+
+    /// Initializes an instance of PlaybackTogglePlayPauseNetwork for toggling the playback state on the given group.
+    /// - Important: Requires a call to `performRequest()` to make the request.
+    /// - Parameters:
+    ///   - accessToken: The authentication token.
+    ///   - groupId: This command requires a groupId to determine the target of the command.
+    ///   - success: The callback when this request is successful. Response provided as `Data?`.
+    ///   - failure: The callback when this request is unsuccessful. Error provided as `Error?`.
+    public init(accessToken: String,
+                groupId: String,
+                success: @escaping (Data?) -> Void,
+                failure: @escaping (Error?) -> Void) {
+        self.accessToken = accessToken
+        self.groupId = groupId
+        self.successHandler = success
+        self.failureHandler = failure
+    }
+    
+    // MARK: - Network
+    
+    override func HTTPMethod() -> HTTPMethod {
+        return .post
+    }
+
+    override func encoding() -> ParameterEncoding {
+        return JSONEncoding.default
+    }
+    
+    override func preparedURL() -> URLConvertible {
+        return "https://api.ws.sonos.com/control/api/v1/groups/\(groupId)/playback/togglePlayPause"
+    }
+
+    override func headers() -> HTTPHeaders? {
+        let headers = [
+            HTTPHeader(name: "Content-Type", value: "application/json"),
+            HTTPHeader(name: "Authorization", value: "Bearer \(accessToken)")
+        ]
+
+        return HTTPHeaders(headers)
+    }
+        
+    override func success(_ data: Data?) {
+        successHandler(data)
+    }
+    
+    override func failure(_ error: Error?) {
+        failureHandler(error)
+    }
+
+}
